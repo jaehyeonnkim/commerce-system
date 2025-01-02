@@ -575,3 +575,75 @@ docker-compose up -d
 | -   | pay_at  | 결제된 일시           | timestamp | "2025-01-03T00,00,00Z"     |
 | -   | created_at     | 생성일시             | timestamp | "2025-01-03T00,00,00Z"     |
 | -   | updated_at     | 수정일시             | timestamp | "2025-01-03T00,00,00Z"     |
+
+
+## 10. 패키지 구조
+- /order : 주문 관련 로직
+- /payment : 결제 관련 로직
+- /product : 상품 관련 로직
+- /user : 사용자 관련 로직
+- /coupon : 쿠폰 관련 로직
+```md
+/application               
+    /order                
+        - OrderService.java
+    /payment              
+        - PaymentService.java
+    /product              
+        - ProductService.java
+    /user                 
+        - UserService.java
+    /coupon               
+        - CouponService.java
+
+/domain                    
+    /order                
+        - Order.java
+    /payment              
+        - Payment.java
+    /product               
+        - Product.java
+    /user                  
+        - User.java
+    /coupon                
+        - Coupon.java
+
+/infra                    
+    /order                 
+        - OrderRepository.java      
+        - OrderEntity.java          
+        - OrderJpaAdapter.java      
+    /payment               
+        - PaymentRepository.java  
+        - PaymentEntity.java       
+        - PaymentJpaAdapter.java   
+    /product               
+        - ProductRepository.java   
+        - ProductEntity.java       
+        - ProductJpaAdapter.java
+    /user               
+        - UserRepository.java  
+        - UserEntity.java       
+        - UserJpaAdapter.java   
+    /coupon               
+        - CouponRepository.java   
+        - CouponEntity.java       
+        - CouponJpaAdapter.java   
+
+/interfaces                
+    /order                 
+        - OrderController.java     
+        - OrderRequest.java        
+    /payment              
+        - PaymentController.java   
+        - PaymentRequest.java      
+    /product               
+        - ProductController.java   
+        - ProductRequest.java      
+    /user                  
+        - UserController.java      
+        - UserRequest.java       
+    /coupon                
+        - CouponController.java    
+        - CouponRequest.java   
+```
