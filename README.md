@@ -25,6 +25,7 @@ docker-compose up -d
 6. [인기 상품 조회 API](#6-인기-상품-조회-api)
 7. [선착순 쿠폰 발급 API](#7-선착순-쿠폰-발급-api)
 8. [보유 쿠폰 조회 API](#8-보유-쿠폰-조회-api)
+9. [erd](#9-erd)
 ---
 ## 0. 프로젝트 마일스톤
 ![milestone](/docs/milestone/milestone.png)
@@ -445,3 +446,132 @@ docker-compose up -d
     "message": "사용자 정보를 찾을 수 없습니다."
 }
 ```
+
+#### 9. erd
+![erd](/docs/erd/erd.png)
+- 실제 데이터베이스에서는 성능 등의 이유로 FK를 넣지 않는다
+### 9.1. User 테이블
+- 사용자의 기본 정보를 관리하는 테이블
+
+| key | 컬럼명    |설명|타입|예시|
+|-----|--------|--|--|-|
+| PK  |        |user_id|user 테이블 일련번호|int|1|
+| -   | name   | 사용자 이름 |varchar|김재현|
+| -   | phone      | 휴대폰 번호 |varchar|010-2222-6666|
+| -   | address    | 집 주소   |varchar|서울특별시 어쩌구동 저쩌구아파트|
+| -   | created_at | 생성일시   |timestamp|"2025-01-03T12,00,00Z"|
+| -   | updated_at | 수정일시   |timestamp|"2025-01-03T12,00,00Z"|
+
+
+### 9.2. UserBalance 테이블
+- 사용자의 잔액 정보를 관리하는 테이블
+
+| key              | 컬럼명            | 설명                   |타입| 예시                     |
+|--------|----------------|----------------------|--|------------------------|
+| PK| userbalance_id | UserBalance 테이블 일련번호 |int| 1                      |
+|-|  user_id          | user 테이블 일련번호        |int| 1                      |
+| -| type             | 사용 타입                |varchar| 'CHARGE'','USE','REFUND' |
+|-|  amount           | 사용 금액                |int| 2000                   |
+| -| balance          | 최종 잔액                |int| 12000                  |
+| -| created_at       | 생성일시                 |timestamp| "2025-01-03T12,00,00Z" |
+|-|  updated_at       | 수정일시                 |timestamp| "2025-01-03T12,00,00Z" |
+
+### 9.3. Coupon 테이블
+- 시스템의 쿠폰을 관리하는 테이블 
+
+| key| 컬럼명        | 설명                     |타입| 예시                     |
+|---|------------|------------------------|--|------------------------| 
+| PK| coupon_id  | Coupon 테이블 일련번호        |int| 1                      |
+| -| code       | 쿠폰 코드                  |int| 2025NEWYEAR            |
+| -| name       | 쿠폰 이름                  |varchar| 새해 기념 쿠폰               |
+| -| type       | 쿠폰 타입 |varchar| 'FIXED', PERCENT'      |
+| -| value      | 할인 값                   |int| 2000                   |
+|-| status     | 쿠폰 상태                  |varchar| 'ACTIVE', 'EXPIRED','STOP'|                
+|-| start_at   | 쿠폰 시작날짜                |int| "2025-01-01T00,00,00Z" |
+|-| end_at     | 쿠폰 만료날짜                |int| "2025-01-30T12,00,00Z" |
+|-| created_at | 생성일시                   |timestamp| "2024-12-31T12,00,00Z" |
+|-| updated_at | 수정일시                   |timestamp| "2024-12-31T12,00,00Z" |
+
+
+### 9.4. UserCoupon 테이블
+- 사용자의 쿠폰 정보를 관리하는 테이블
+
+| key | 컬럼명 | 설명                  |타입| 예시                       |
+|-----|----|---------------------|--|--------------------------| 
+| PK  | userCoupon | userCoupon 테이블 일련번호 |int| 1                        |
+| FK  | user_id | user 테이블 일련번호       |int| 1                        |
+| FK  | coupon_id | Coupon 테이블 일련번호     |int| 1                        |
+| -   | status | 쿠폰 상태               |varchar| 'ACTIVE','EXPIRED','USED' |
+| -   | use_at | 쿠폰 사용 일시            |timestamp| "2025-01-02T12,00,00Z"   |
+| -   | issue_at | 쿠폰 발급 일시            |timestamp| "2025-01-01T16,00,00Z"   |
+| -   | created_at | 생성일시                |timestamp| "2025-01-01T16,00,00Z"     |
+| -   | updated_at | 수정일시                |timestamp| "2025-01-01T16,00,00Z"    |
+
+
+### 9.5. Order 테이블
+- 주문 정보를 저장하는 테이블
+
+| key | 컬럼명          | 설명                  |타입| 예시                         |
+|-----|--------------|---------------------|--|----------------------------| 
+| PK  | order_id     | Order 테이블 일련번호 |int| 1                          |
+| FK  | user_id      | user 테이블 일련번호       |int| 1                          |
+| -   | order_at     | 주문 일시               |timestamp| "2025-01-01T16,00,00Z"     |
+| -   | status       | 주문 상태               |varchar| 'SUCCESS','FAIL','PROCEED' |
+| -   | total_amount | 총 금액        |int| 85000                      |
+| -   | created_at   | 생성일시                |timestamp| "2025-01-01T16,00,00Z"     |
+| -   | updated_at   | 수정일시                |timestamp| "2025-01-01T16,00,00Z"     |
+
+
+### 9.6. OrderProduct 테이블
+- 주문한 상품을 관리하는 테이블
+
+| key | 컬럼명             | 설명                    |타입| 예시                     |
+|-----|-----------------|-----------------------|--|------------------------| 
+| PK  | orderProduct_id | OrderProduct 테이블 일련번호 |int| 1                      |
+| FK  | order_id        | Order 테이블 일련번호        |int| 1                      |
+| FK   | product_id      | Product 테이블 일련번호      |int| 1                      |
+| -   | quantity        | 주문 수량                 |int| 3                      |
+| -   | created_at      | 생성일시                  |timestamp| "2025-01-01T16,00,00Z" |
+| -   | updated_at      | 수정일시                  |timestamp| "2025-01-01T16,00,00Z" |
+
+
+
+### 9.7. Product 테이블
+- 상품을 관리하는 테이블
+
+| key | 컬럼명        | 설명               | 타입        | 예시                     |
+|----|------------|------------------|-----------|------------------------| 
+| PK | product_id | Product 테이블 일련번호 | int       | 1                      |
+| -  | name       | 상품명              | varchar   | "베이직 백팩"                 |
+| -  | price      | 상품 단가            | int       | 13000                  |
+| -  | stock      | 상품 재고            | int       | 230                    |
+| -  | created_at | 생성일시             | timestamp | "2025-01-01T16,00,00Z" |
+| -  | updated_at | 수정일시             | timestamp | "2025-01-01T16,00,00Z" |
+
+
+### 9.8. PopularProduct 테이블
+- 배치를 통해 인기 상품을 관리하는 테이블
+
+| key | 컬럼명        | 설명                      | 타입        | 예시                     |
+|-----|------------|-------------------------|-----------|------------------------| 
+| PK  | popularproduct_id | PopularProduct 테이블 일련번호 | int       | 1                      |
+| FK  | product_id       | Product 테이블 일련번호        | varchar   | "베이직 백팩"               |
+| -   | total_quantity      | 상품이 팔린 수량               | int       | 85                     |
+| -   | calculated_at      | 집계된 일시                  | timestamp | "2025-01-03T00,00,00Z" |
+| -   | created_at | 생성일시                    | timestamp | "2025-01-03T00,00,00Z" |
+| -   | updated_at | 수정일시                    | timestamp | "2025-01-03T00,00,00Z" |
+
+### 9.9. Payment 테이블
+- 주문 결제를 관리하는 테이블
+
+| key | 컬럼명            | 설명               | 타입        | 예시                         |
+|-----|----------------|------------------|-----------|----------------------------| 
+| PK  | payment_id     | Payment 테이블 일련번호 | int       | 1                          |
+| FK  | user_id        | User 테이블 일련번호    | int   | 1                          |
+| FK   | order_id | Order 테이블 일련번호   | int       | 1                          |
+| FK   | coupon_id  | Coupon 테이블 일련번호  | int | 1                          |
+| -   | type        | 결제 타입            | varchar   | 'CARD','CASH','POINT'      |
+| -   | status | 결제 상태            | varchar       | 'SUCCESS','FAIL','PROCEED' |
+| -   | pay_at  | 결제된 일시           | timestamp | "2025-01-03T00,00,00Z"     |
+| -   | created_at     | 생성일시             | timestamp | "2025-01-03T00,00,00Z"     |
+| -   | updated_at     | 수정일시             | timestamp | "2025-01-03T00,00,00Z"     |
