@@ -1,5 +1,14 @@
-package kr.hhplus.be.server.interfaces.product;
+package kr.hhplus.be.server.api.product.controller;
 
+import kr.hhplus.be.server.api.product.dto.ProductRequest;
+import kr.hhplus.be.server.api.product.dto.ProductResponse;
+import kr.hhplus.be.server.common.CommonConstants;
+import kr.hhplus.be.server.domain.product.model.Product;
+import kr.hhplus.be.server.domain.product.service.ProductReader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,36 +19,21 @@ import java.util.Map;
 @RequestMapping("/api/product")
 public class productController {
 
+    private final ProductReader productReader;
+
+    public productController(ProductReader productReader) {
+        this.productReader = productReader;
+    }
+
     //상품 조회
     @GetMapping
-    public ResponseEntity<Object> getProducts(@RequestBody ProductRequest productRequest) {
+    public Page<ProductResponse> getProducts(@RequestParam(defaultValue = CommonConstants.DEFAULT_PAGE_NO) int pageNo,
+                                            @RequestParam(defaultValue = CommonConstants.DEFAULT_SORT_CRITERIA) String criteria) {
+        Pageable pageable = PageRequest.of(pageNo, CommonConstants.PAGESIZE, Sort.by(Sort.Direction.DESC, criteria));
 
-        Map<String, Object> response = Map.of(
-                "page", 1,
-                "size", 10,
-                "sort", "price,desc",
-                "totalCount", 654,
-                "productList", List.of(
-                        Map.of(
-                                "productId", 23421,
-                                "name", "가방1",
-                                "price", 43000,
-                                "categoryName", "bag",
-                                "count", 300,
-                                "createdAt", "2024-03-02T03:10:00"
-                        ),
-                        Map.of(
-                                "productId", 5421,
-                                "name", "가방2",
-                                "price", 41000,
-                                "categoryName", "bag",
-                                "count", 112,
-                                "createdAt", "2024-04-02T08:20:00"
-                        )
-                )
-        );
+        Page<Product> products = productReader.getProducts(pageable);
 
-        return ResponseEntity.ok(response);
+        return products.map(ProductResponse::from);
     }
 
     //인기 상품 조회
