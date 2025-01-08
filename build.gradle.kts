@@ -52,6 +52,10 @@ dependencies {
 	//p6spy
 	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
 
+	//swagger
+	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+
 }
 
 tasks.withType<Test> {
