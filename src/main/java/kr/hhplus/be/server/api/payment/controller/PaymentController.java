@@ -1,7 +1,7 @@
-package kr.hhplus.be.server.interfaces.payment;
+package kr.hhplus.be.server.api.payment.controller;
 
 
-import kr.hhplus.be.server.interfaces.order.OrderRequest;
+import kr.hhplus.be.server.api.payment.dto.PaymentRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

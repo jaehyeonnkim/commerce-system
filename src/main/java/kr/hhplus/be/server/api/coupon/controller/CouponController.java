@@ -1,5 +1,6 @@
-package kr.hhplus.be.server.interfaces.coupon;
+package kr.hhplus.be.server.api.coupon.controller;
 
+import kr.hhplus.be.server.api.coupon.dto.CouponRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,5 +1,6 @@
-package kr.hhplus.be.server.interfaces.user;
+package kr.hhplus.be.server.api.user.controller;
 
+import kr.hhplus.be.server.api.user.dto.UserRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
