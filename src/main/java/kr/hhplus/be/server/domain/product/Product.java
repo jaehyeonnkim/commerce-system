@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.domain.product.model;
+package kr.hhplus.be.server.domain.product;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,6 +39,10 @@ public class Product {
 
 
     public Product() {
+
+    }
+
+    public void removeStock(int count) {
 
     }
 }

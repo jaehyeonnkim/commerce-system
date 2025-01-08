@@ -1,10 +1,9 @@
-package kr.hhplus.be.server.domain.product.infra;
+package kr.hhplus.be.server.infra.product;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import kr.hhplus.be.server.domain.product.model.Product;
-import kr.hhplus.be.server.domain.product.repository.ProductReaderRepository;
-import kr.hhplus.be.server.domain.user.model.User;
+import kr.hhplus.be.server.domain.product.Product;
+import kr.hhplus.be.server.domain.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class ProductCoreReaderRepository implements ProductReaderRepository {
+public class ProductRepositoryImpl implements ProductRepository {
 
-    private ProductReaderRepository productReaderRepository;
+    private ProductRepository productRepository;
 
     @PersistenceContext
     private final EntityManager em;
@@ -24,7 +23,7 @@ public class ProductCoreReaderRepository implements ProductReaderRepository {
     }
 
     public Page<Product> findAll(Pageable pageable) {
-        return productReaderRepository.findAll(pageable);
+        return productRepository.findAll(pageable);
     }
 }
 

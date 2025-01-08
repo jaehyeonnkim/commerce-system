@@ -1,8 +1,7 @@
-package kr.hhplus.be.server.domain.order.model;
+package kr.hhplus.be.server.domain.order;
 
 import jakarta.persistence.*;
-import kr.hhplus.be.server.domain.product.model.Product;
-import kr.hhplus.be.server.domain.user.model.User;
+import kr.hhplus.be.server.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
