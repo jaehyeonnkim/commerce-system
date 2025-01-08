@@ -57,6 +57,7 @@ public class Order {
         order.setUser(user);
         order.addOrderProduct(orderproduct);
         order.setStatus("ORDER");
+        order.setTotalAmount(orderproduct.getTotalPrice());
         order.setOrderedAt(LocalDateTime.now());
         return order;
     }
@@ -69,5 +70,6 @@ public class Order {
             throw new IllegalStateException("주문이 유효하지 않습니다");
         }
         this.status = "PAID";
+        this.updatedAt = LocalDateTime.now();
     }
 }

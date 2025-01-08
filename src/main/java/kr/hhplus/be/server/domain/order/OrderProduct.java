@@ -41,4 +41,8 @@ public class OrderProduct {
         Product.removeStock(quantity);
         return OrderProduct;
     }
+
+    public int getTotalPrice() {
+        return getOrderPrice() * getQuantity();
+    }
 }
