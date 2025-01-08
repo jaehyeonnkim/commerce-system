@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductReaderRepository extends JpaRepository<Product, Long> {
+public interface ProductReaderRepository {
+
+    Product findById(Long productId);
 
     Page<Product> findAll(Pageable pageable);
 }
