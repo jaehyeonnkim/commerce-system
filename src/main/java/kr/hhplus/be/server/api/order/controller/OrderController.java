@@ -17,8 +17,7 @@ public class OrderController {
 
     //상품 주문
     @PostMapping("/{userId}")
-    public OrderResponse orderProducts(@PathVariable Long userId,
-                                       @RequestBody OrderRequest orderRequest) {
-       return orderService.order(userId, orderRequest.getProductId(), orderRequest.getQuantity());
+    public OrderResponse orderProducts(@RequestBody OrderRequest orderRequest) {
+       return orderService.order(orderRequest);
     }
 }

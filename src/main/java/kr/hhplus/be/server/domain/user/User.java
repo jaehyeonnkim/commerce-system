@@ -2,6 +2,7 @@ package kr.hhplus.be.server.domain.user;
 
 import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.order.Order;
+import kr.hhplus.be.server.domain.payment.Payment;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,8 +20,11 @@ public class User {
     @Column(name="user_id")
     private Long id;
 
-    @OneToMany(mappedBy = "user")//order table에 있는 user
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)//order table에 있는 user
     private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Payment> payments = new ArrayList<>();
 
     private String name;
     private String phone;
@@ -29,4 +33,10 @@ public class User {
     private LocalDateTime updatedAt;
 
 
+    //validation
+    public void validateUser() {
+        if (this == null) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
+    }
 }

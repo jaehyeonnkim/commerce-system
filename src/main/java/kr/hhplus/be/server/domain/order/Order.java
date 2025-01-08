@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.order;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.domain.payment.Payment;
 import kr.hhplus.be.server.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,9 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderProduct> orderItems = new ArrayList<>();
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
 
     private String status;
 
@@ -58,4 +62,12 @@ public class Order {
     }
 
     public Order() {}
+
+    //validation
+    public void markAsPaid() {
+        if (!"ORDER".equals(this.status)) {
+            throw new IllegalStateException("주문이 유효하지 않습니다");
+        }
+        this.status = "PAID";
+    }
 }

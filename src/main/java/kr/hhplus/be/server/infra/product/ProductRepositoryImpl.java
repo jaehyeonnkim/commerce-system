@@ -18,10 +18,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     @PersistenceContext
     private final EntityManager em;
 
+    @Override
     public Product findById(Long productId) {
         return em.find(Product.class, productId);
     }
 
+    @Override
     public Page<Product> findAll(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
