@@ -3,6 +3,7 @@ package kr.hhplus.be.server.domain.coupon.model;
 import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.user.model.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Comment;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Coupon {
 
     @Id
@@ -47,6 +49,16 @@ public class Coupon {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Coupon(Long id, CouponType type, int value, int maxQuantity, int issuedQuantity, CouponStatus status, String code) {
+        this.id = id;
+        this.type = type;
+        this.value = value;
+        this.maxQuantity = maxQuantity;
+        this.issuedQuantity = issuedQuantity;
+        this.status = status;
+        this.code = code;
+    }
 
     //쿠폰 발급 생성
     public IssueCoupon issueCoupon(User user) {
