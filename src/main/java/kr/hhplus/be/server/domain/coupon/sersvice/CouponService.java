@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -40,10 +41,12 @@ public class CouponService {
      */
     public CouponResponse issueCoupon(CouponRequest couponRequest) {
         User user = findByIdOrThrow(userJpaRepository, couponRequest.getUserId(), "사용자를 찾을 수 없습니다.");
-        Coupon coupon = null;
-        if (couponRequest.getCouponId() != null) {
-            coupon = findByIdOrThrow(couponJpaRepository, couponRequest.getCouponId(), "쿠폰을 찾을 수 없습니다.");
+
+        Coupon coupon = couponJpaRepository.findByIdWithLock(couponRequest.getCouponId());
+        if (coupon == null) {
+            throw new IllegalArgumentException("쿠폰을 찾을 수 없습니다.");
         }
+
         coupon = couponJpaRepository.findByIdWithLock(couponRequest.getCouponId());
 
         // 쿠폰 발급 및 발급 기록 생성

@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.api.coupon.dto;
 
+import kr.hhplus.be.server.domain.coupon.model.CouponStatus;
 import kr.hhplus.be.server.domain.coupon.model.CouponType;
 import lombok.*;
 
@@ -19,4 +20,12 @@ public class CouponResponse {
     private LocalDateTime issuedAt;
     private LocalDateTime usedAt;
     private LocalDateTime expiredAt;
+
+    public CouponResponse(Long id, CouponType type, int value, String code) {
+        this.couponId = id;
+        this.type = type;
+        this.value = value;
+        this.code = code;
+    }
+
 }
