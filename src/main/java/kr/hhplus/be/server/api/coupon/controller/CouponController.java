@@ -1,35 +1,30 @@
 package kr.hhplus.be.server.api.coupon.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hhplus.be.server.api.coupon.dto.CouponRequest;
 import kr.hhplus.be.server.api.coupon.dto.CouponResponse;
 import kr.hhplus.be.server.domain.coupon.sersvice.CouponService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/coupon")
+@RequiredArgsConstructor
+@Tag(name = "쿠폰 API", description = "쿠폰을 관리하는 API")
 public class CouponController {
     private final CouponService couponService;
 
-    public CouponController(CouponService couponService) {
-        this.couponService = couponService;
-    }
-
     //쿠폰 발급
+    @Operation(summary = "쿠폰 발급")
     @PostMapping("/{userId}/issue")
     public CouponResponse issueCoupon(@RequestBody CouponRequest couponRequest) {
         return couponService.issueCoupon(couponRequest);
-//        Map<String, Object> response = Map.of(
-//                "userId", "12345",
-//                "couponCode", "2025NEWYEAR",
-//                "fixed", "type",
-//                "value", 10000,
-//                "expirationDate", "2025-12-31",
-//                "issuedAt", "2025-01-03T12,00,00Z"
-//        );
     }
     //보유 쿠폰 조회
+    @Operation(summary = "쿠폰 조회")
     @GetMapping("/{userId}")
     public List<CouponResponse> getCoupon(@PathVariable Long userId) {
         return couponService.getCouponList(userId);
