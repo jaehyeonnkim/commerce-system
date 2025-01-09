@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.user;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.domain.coupon.Coupon;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.payment.Payment;
 import lombok.Getter;
@@ -25,6 +26,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Coupon> coupons = new ArrayList<>();
 
     private String name;
     private String phone;
