@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.coupon.model.IssueCoupon;
 import kr.hhplus.be.server.domain.order.model.Order;
 import kr.hhplus.be.server.domain.payment.model.Payment;
+import kr.hhplus.be.server.domain.wallet.model.Wallet;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<IssueCoupon> issueCoupons = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Wallet> wallets = new ArrayList<>();
 
     private String name;
     private String phone;
