@@ -38,27 +38,8 @@ public class productController {
 
     //인기 상품 조회
     @GetMapping("/popular")
-    public ResponseEntity<Object> getPopularProducts(@RequestBody ProductRequest productRequest) {
-        Map<String, Object> response = Map.of(
-                "productList", List.of(
-                        Map.of(
-                                "itemId", 2341,
-                                "totalQuantity", 93,
-                                "calculatedAt", "2025-01-03T00:00:00Z"
-                        ),
-                        Map.of(
-                                "itemId", 2341,
-                                "totalQuantity", 93,
-                                "calculatedAt", "2025-01-03T00:00:00Z"
-                        ),
-                        Map.of(
-                                "itemId", 2341,
-                                "totalQuantity", 93,
-                                "calculatedAt", "2025-01-03T00:00:00Z"
-                        )
-                )
-        );
-        return ResponseEntity.ok(response);
+    public List<?> getPopularProducts() {
+        return productService.getPopularProducts();
     }
 
 }
