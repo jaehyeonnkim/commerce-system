@@ -45,7 +45,8 @@ public class IssueCoupon {
                 coupon.getValue(),
                 used,
                 issuedAt,
-                usedAt
+                usedAt,
+                coupon.getExpiredAt()
         );
     }
 

@@ -8,4 +8,5 @@ import lombok.ToString;
 @ToString
 public class CouponRequest {
     private Long userId;
+    private Long couponId;
 }

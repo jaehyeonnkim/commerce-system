@@ -22,20 +22,17 @@ public class CouponController {
 
     //쿠폰 발급
     @PostMapping("/{userId}/issue")
-    public ResponseEntity<Object> issueCoupon(@RequestBody CouponRequest couponRequest) {
-
-        Map<String, Object> response = Map.of(
-                "userId", "12345",
-                "couponCode", "2025NEWYEAR",
-                "fixed", "type",
-                "value", 10000,
-                "expirationDate", "2025-12-31",
-                "issuedAt", "2025-01-03T12,00,00Z"
-        );
-
-        return ResponseEntity.ok(response);
+    public CouponResponse issueCoupon(@RequestBody CouponRequest couponRequest) {
+        return couponService.issueCoupon(couponRequest);
+//        Map<String, Object> response = Map.of(
+//                "userId", "12345",
+//                "couponCode", "2025NEWYEAR",
+//                "fixed", "type",
+//                "value", 10000,
+//                "expirationDate", "2025-12-31",
+//                "issuedAt", "2025-01-03T12,00,00Z"
+//        );
     }
-
     //보유 쿠폰 조회
     @GetMapping("/{userId}")
     public List<CouponResponse> getCoupon(@PathVariable Long userId) {
