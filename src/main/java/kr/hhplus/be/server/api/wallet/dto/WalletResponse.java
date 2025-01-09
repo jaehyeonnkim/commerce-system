@@ -11,7 +11,11 @@ import lombok.*;
 public class WalletResponse{
     private Long walletId;
     private String message;
+    private int balance;
 
     public WalletResponse(Wallet wallet) {
+        this.walletId = wallet.getId();
+        this.balance = wallet.getBalance();
     }
+
 }

@@ -1,7 +1,5 @@
 package kr.hhplus.be.server.domain.wallet.service;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityResult;
 import kr.hhplus.be.server.api.wallet.dto.WalletRequest;
 import kr.hhplus.be.server.api.wallet.dto.WalletResponse;
 import kr.hhplus.be.server.domain.user.model.User;
@@ -14,10 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -52,7 +46,7 @@ public class WalletService {
 
         walletJpaRepository.save(wallet);
 
-        WalletResponse response = new WalletResponse(wallet.getId(), "충전에 성공하였습니다");
+        WalletResponse response = new WalletResponse(wallet.getId(), "충전에 성공하였습니다", wallet.getBalance());
         return ResponseEntity.ok(response);
     }
 
