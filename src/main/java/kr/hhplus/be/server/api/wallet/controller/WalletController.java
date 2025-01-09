@@ -2,6 +2,7 @@ package kr.hhplus.be.server.api.wallet.controller;
 
 import kr.hhplus.be.server.api.coupon.dto.CouponResponse;
 import kr.hhplus.be.server.api.user.dto.UserRequest;
+import kr.hhplus.be.server.api.wallet.dto.WalletRequest;
 import kr.hhplus.be.server.api.wallet.dto.WalletResponse;
 import kr.hhplus.be.server.domain.user.model.User;
 import kr.hhplus.be.server.domain.wallet.service.WalletService;
@@ -26,13 +27,7 @@ public class WalletController {
 
     //잔액 충전
     @PostMapping("/{userId}/charge")
-    public ResponseEntity<Object> chargeUserBalance(@PathVariable Long userId, @RequestBody UserRequest userRequest) {
-        Map<String, Object> response = Map.of(
-                "balance", 15000,
-                "message", "잔액이 성공적으로 충전됐습니다.",
-                "userId", userId,
-                "chargedAmount", 30000
-        );
-        return ResponseEntity.ok(response);
+    public ResponseEntity<WalletResponse> chargeUserBalance(@RequestBody WalletRequest walletRequest) {
+        return walletService.chargePoint(walletRequest);
     }
 }

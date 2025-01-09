@@ -34,4 +34,17 @@ public class Wallet {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    // 지갑 생성 메서드
+    public static Wallet createNewWallet(User user, int amount, int balance, TransactionType type) {
+        Wallet wallet = new Wallet();
+        wallet.user = user;
+        wallet.amount = amount;
+        wallet.balance = balance;
+        wallet.type = type;
+        wallet.createdAt = LocalDateTime.now();
+        wallet.updatedAt = LocalDateTime.now();
+        return wallet;
+    }
+
 }
