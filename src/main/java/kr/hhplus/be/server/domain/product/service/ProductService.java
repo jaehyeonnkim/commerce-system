@@ -23,14 +23,12 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final  OrderProductJpaRepository orderProductJpaRepository;
 
+    //상품 조회
     public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
 
-    public Product findById(Long id) {
-        return productRepository.findById(id);
-    }
-
+    //인기 상품 조회
     public List<Map<String, Object>> getPopularProducts() {
         List<Object[]> result = orderProductJpaRepository.findPopularProducts();
         List<Map<String, Object>> products = new ArrayList<>();
