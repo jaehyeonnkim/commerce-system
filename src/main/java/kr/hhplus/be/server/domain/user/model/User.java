@@ -6,6 +6,7 @@ import kr.hhplus.be.server.domain.order.model.Order;
 import kr.hhplus.be.server.domain.payment.model.Payment;
 import kr.hhplus.be.server.domain.wallet.model.Wallet;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Table(name="users")
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -40,6 +42,10 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public User(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     //validation
     public void validateUser() {
