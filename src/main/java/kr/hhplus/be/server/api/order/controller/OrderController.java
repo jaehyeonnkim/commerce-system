@@ -2,7 +2,7 @@ package kr.hhplus.be.server.api.order.controller;
 
 import kr.hhplus.be.server.api.order.dto.OrderRequest;
 import kr.hhplus.be.server.api.order.dto.OrderResponse;
-import kr.hhplus.be.server.domain.order.OrderService;
+import kr.hhplus.be.server.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

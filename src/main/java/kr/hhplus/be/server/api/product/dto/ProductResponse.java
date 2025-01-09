@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.api.product.dto;
 
-import kr.hhplus.be.server.domain.product.Product;
+import kr.hhplus.be.server.domain.product.model.Product;
 import lombok.*;
 
 @Getter @Setter

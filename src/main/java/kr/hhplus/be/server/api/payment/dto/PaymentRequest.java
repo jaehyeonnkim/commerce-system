@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.api.payment.dto;
 
-import kr.hhplus.be.server.domain.payment.PaymentType;
+import kr.hhplus.be.server.domain.payment.model.PaymentType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

@@ -1,19 +1,16 @@
 package kr.hhplus.be.server.api.product.controller;
 
-import kr.hhplus.be.server.api.product.dto.ProductRequest;
 import kr.hhplus.be.server.api.product.dto.ProductResponse;
 import kr.hhplus.be.server.common.CommonConstants;
-import kr.hhplus.be.server.domain.product.Product;
-import kr.hhplus.be.server.domain.product.ProductService;
+import kr.hhplus.be.server.domain.product.model.Product;
+import kr.hhplus.be.server.domain.product.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/product")

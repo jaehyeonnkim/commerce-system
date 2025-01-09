@@ -2,14 +2,10 @@ package kr.hhplus.be.server.api.coupon.controller;
 
 import kr.hhplus.be.server.api.coupon.dto.CouponRequest;
 import kr.hhplus.be.server.api.coupon.dto.CouponResponse;
-import kr.hhplus.be.server.api.payment.dto.PaymentRequest;
-import kr.hhplus.be.server.api.payment.dto.PaymentResponse;
-import kr.hhplus.be.server.domain.coupon.CouponService;
-import org.springframework.http.ResponseEntity;
+import kr.hhplus.be.server.domain.coupon.sersvice.CouponService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/coupon")

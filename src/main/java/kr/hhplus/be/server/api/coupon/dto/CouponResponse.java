@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.api.coupon.dto;
 
-import kr.hhplus.be.server.domain.coupon.CouponType;
+import kr.hhplus.be.server.domain.coupon.model.CouponType;
 import lombok.*;
 
 import java.time.LocalDateTime;
