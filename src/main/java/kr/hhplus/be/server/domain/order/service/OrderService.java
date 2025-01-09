@@ -40,6 +40,7 @@ public class OrderService {
         orderJpaRepository.save(order);
 
         orderResponse.setId(order.getId());
+        orderResponse.setTotalAmount(order.getTotalAmount());
         return orderResponse;
     }
 

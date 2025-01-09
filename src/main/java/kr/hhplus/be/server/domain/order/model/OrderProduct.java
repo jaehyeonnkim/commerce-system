@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class OrderProduct {
 
     @Id
@@ -30,6 +31,8 @@ public class OrderProduct {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+
 
     //==생성 메서드==//
     public static OrderProduct createOrderItem(Product Product, int orderPrice, int quantity) {

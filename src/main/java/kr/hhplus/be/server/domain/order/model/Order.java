@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.payment.model.Payment;
 import kr.hhplus.be.server.domain.user.model.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @Table(name="orders")
+@NoArgsConstructor
 public class Order {
 
     @Id
@@ -62,7 +64,6 @@ public class Order {
         return order;
     }
 
-    public Order() {}
 
     //validation
     public void markAsPaid() {

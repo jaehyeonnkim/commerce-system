@@ -11,4 +11,6 @@ import lombok.ToString;
 public class OrderResponse {
     private Long id;
     private String message;
+    private int totalAmount;
+
 }
