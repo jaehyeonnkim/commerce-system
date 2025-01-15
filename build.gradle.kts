@@ -35,7 +35,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // DB
+	//lombok
+	implementation("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+
+	// DB
 	runtimeOnly("com.mysql:mysql-connector-j")
 
     // Test
@@ -44,6 +48,14 @@ dependencies {
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	//p6spy
+	implementation("com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0")
+
+	//swagger
+	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+
+
 }
 
 tasks.withType<Test> {
