@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.domain.coupon.model;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.common.exception.BusinessException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
 import kr.hhplus.be.server.domain.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,11 +62,15 @@ public class Coupon {
         this.code = code;
     }
 
+
     //쿠폰 발급 생성
     public IssueCoupon issueCoupon(User user) {
+        validateActive();
+        validateIssuable();
+
         // 수량 초과 여부 체크
         if (this.issuedQuantity >= this.maxQuantity) {
-            throw new IllegalStateException("쿠폰 발급 수량이 초과되었습니다.");
+            throw new BusinessException(ErrorCode.EXCEEDED_QUANTITY_COUPON.getCode(), ErrorCode.EXCEEDED_QUANTITY_COUPON.getMessage());
         }
 
         // 발급 수량 증가
@@ -78,14 +84,18 @@ public class Coupon {
 
         return issueCoupon;
     }
-    //validation
-    public void validateCoupon() {
-        if (this == null) {
-            throw new IllegalArgumentException("존재하지 않는 쿠폰입니다.");
+
+    //쿠폰 활성화 여부 검증
+    public void validateActive() {
+        if (!CouponStatus.ACTIVE.equals(this.status)) {
+            throw new BusinessException(ErrorCode.INVALID_COUPON.getCode(), ErrorCode.INVALID_COUPON.getMessage());
         }
-        // 쿠폰 상태 검증
-        if (!this.status.equals(CouponStatus.ACTIVE)) {
-            throw new IllegalStateException("유효하지 않는 쿠폰입니다.");
+    }
+
+    //발급 가능한지 검증
+    public void validateIssuable() {
+        if (this.issuedQuantity >= this.maxQuantity) {
+            throw new BusinessException(ErrorCode.EXCEEDED_QUANTITY_COUPON.getCode(), ErrorCode.EXCEEDED_QUANTITY_COUPON.getMessage());
         }
     }
 

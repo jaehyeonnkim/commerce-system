@@ -1,6 +1,9 @@
 package kr.hhplus.be.server.domain.order.model;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.common.exception.BusinessException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.domain.coupon.model.CouponStatus;
 import kr.hhplus.be.server.domain.payment.model.Payment;
 import kr.hhplus.be.server.domain.user.model.User;
 import lombok.Getter;
@@ -64,13 +67,16 @@ public class Order {
         return order;
     }
 
-
-    //validation
     public void markAsPaid() {
-        if (!"ORDER".equals(this.status)) {
-            throw new IllegalStateException("주문이 유효하지 않습니다");
-        }
+        validateActive();
         this.status = "PAID";
         this.updatedAt = LocalDateTime.now();
+    }
+
+    //주문 정보 여부 검증
+    public void validateActive() {
+        if (!"ORDER".equals(this.status)) {
+            throw new BusinessException(ErrorCode.INVALID_ORDER.getCode(), ErrorCode.INVALID_ORDER.getMessage());
+        }
     }
 }

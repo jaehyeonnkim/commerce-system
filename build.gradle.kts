@@ -55,7 +55,8 @@ dependencies {
 	//swagger
 	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
-
+	//servlet
+	implementation ("jakarta.servlet:jakarta.servlet-api:5.0.0")
 }
 
 tasks.withType<Test> {
