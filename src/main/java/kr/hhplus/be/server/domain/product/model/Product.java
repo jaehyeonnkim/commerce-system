@@ -1,7 +1,9 @@
 package kr.hhplus.be.server.domain.product.model;
 
 import jakarta.persistence.*;
-import kr.hhplus.be.server.common.exception.NotEnoughStockException;
+import kr.hhplus.be.server.common.exception.BusinessException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
+@Builder
 public class Product {
 
     @Id
@@ -54,7 +57,8 @@ public class Product {
     public void removeStock(int quantity) {
         int restStock = this.stock - quantity;
         if (restStock < 0) {
-            throw new NotEnoughStockException("재고가 부족합니다");}
+            throw new BusinessException(ErrorCode.NOT_ENOUGH_STOCK.getCode(), ErrorCode.NOT_ENOUGH_STOCK.getMessage());
+        }
         this.stock = restStock;
     }
 }

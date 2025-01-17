@@ -11,21 +11,21 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class ProductRepositoryImpl implements ProductRepository {
-
-    private ProductRepository productRepository;
-
-    @PersistenceContext
-    private final EntityManager em;
-
-    @Override
-    public Product findById(Long productId) {
-        return em.find(Product.class, productId);
-    }
-
-    @Override
-    public Page<Product> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable);
-    }
+public class ProductRepositoryImpl  {
+//
+//    private ProductRepository productRepository;
+//
+//    @PersistenceContext
+//    private final EntityManager em;
+//
+//    @Override
+//    public Product findById(Long productId) {
+//        return em.find(Product.class, productId);
+//    }
+//
+//    @Override
+//    public Page<Product> findAll(Pageable pageable) {
+//        return productRepository.findAll(pageable);
+//    }
 }
 

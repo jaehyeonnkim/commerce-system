@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.domain.coupon.sersvice;
 
-import kr.hhplus.be.server.api.coupon.dto.CouponRequest;
-import kr.hhplus.be.server.api.coupon.dto.CouponResponse;
+import kr.hhplus.be.server.domain.coupon.dto.CouponRequest;
+import kr.hhplus.be.server.domain.coupon.dto.CouponResponse;
 import kr.hhplus.be.server.domain.coupon.model.Coupon;
 import kr.hhplus.be.server.domain.coupon.model.CouponStatus;
 import kr.hhplus.be.server.domain.coupon.model.CouponType;
@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,7 @@ class CouponServiceTest {
         when(couponJpaRepository.save(coupon)).thenReturn(coupon);
 
         // when
-        CouponResponse couponResponse = couponService.issueCoupon(couponRequest);
+        CouponResponse couponResponse = couponService.issueCoupon(user,coupon,couponRequest);
 
         // then
         assertNotNull(couponResponse);
@@ -64,11 +65,14 @@ class CouponServiceTest {
     public void 선착순_쿠폰_발급_실패_사용자정보_없읍() {
         // given
         CouponRequest couponRequest = new CouponRequest(1L, 1L);
+        User user = new User();
+        Coupon coupon = new Coupon(1L, CouponType.FIXED, 5000, 100, 10, CouponStatus.ACTIVE, "TEST COUPON");
+
         when(userJpaRepository.findById(1L)).thenReturn(Optional.empty());
 
         // when & then
         assertThrows(IllegalArgumentException.class,
-                () -> couponService.issueCoupon(couponRequest),
+                () -> couponService.issueCoupon(user,coupon,couponRequest),
                 "사용자를 찾을 수 없습니다.");
     }
 
@@ -77,6 +81,7 @@ class CouponServiceTest {
     public void 선착순_쿠폰_발급_실패_쿠폰정보_없음() {
         // given
         CouponRequest couponRequest = new CouponRequest(1L, 1L);
+        Coupon coupon = null;
         User user = new User(1L, "김재현");
 
         when(userJpaRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -84,7 +89,7 @@ class CouponServiceTest {
 
         // when & then
         assertThrows(IllegalArgumentException.class,
-                () -> couponService.issueCoupon(couponRequest),
+                () -> couponService.issueCoupon(user,coupon,couponRequest),
                 "쿠폰을 찾을 수 없습니다.");
     }
 
@@ -94,7 +99,8 @@ class CouponServiceTest {
         // given
         Long userId = 1L;
         User user = new User(1L, "김재현");
-        List<CouponResponse> couponResponses = List.of(new CouponResponse(1L, CouponType.FIXED, 2000, "TEST COUPON"));
+        List<CouponResponse> couponResponses = List.of(new CouponResponse(
+                1L,"새해쿠폰", "TEST_COUPON",CouponType.FIXED, 2000,false, LocalDateTime.now(), null,LocalDateTime.now()));
 
         when(userJpaRepository.findById(1L)).thenReturn(Optional.of(user));
         when(couponJpaRepository.findAllbyId(1L)).thenReturn(couponResponses);

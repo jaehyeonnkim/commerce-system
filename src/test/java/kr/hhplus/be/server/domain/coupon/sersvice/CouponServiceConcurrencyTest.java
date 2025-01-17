@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.coupon.sersvice;
 
-import kr.hhplus.be.server.api.coupon.dto.CouponRequest;
+import kr.hhplus.be.server.domain.coupon.dto.CouponRequest;
 import kr.hhplus.be.server.domain.coupon.model.Coupon;
 import kr.hhplus.be.server.domain.coupon.model.CouponStatus;
 import kr.hhplus.be.server.domain.coupon.model.CouponType;
@@ -56,7 +56,7 @@ public class CouponServiceConcurrencyTest {
 
     @Test
     @DisplayName("동시성 테스트 - 쿠폰 선착순 발급 성공")
-    public void testIssueCoupon_ConcurrencySuccess() throws InterruptedException {
+    public void 쿠폰_선착순_동시성_테스트() throws InterruptedException {
         // given
         int numberOfThreads = 10; // 쓰레드 수
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
@@ -67,7 +67,7 @@ public class CouponServiceConcurrencyTest {
             executorService.execute(() -> {
                 try {
                     CouponRequest couponRequest = new CouponRequest(user.getId(), coupon.getId());
-                    couponService.issueCoupon(couponRequest);
+                    couponService.issueCoupon(user, coupon, couponRequest);
                 } finally {
                     latch.countDown();
                 }

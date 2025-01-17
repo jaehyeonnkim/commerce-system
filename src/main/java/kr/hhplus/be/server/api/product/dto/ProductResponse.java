@@ -7,15 +7,12 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductResponse {
     private Long id;
     private String name;
     private int price;
 
-    public ProductResponse(long l, int i) {
-    }
-
-    //ProductResponse로 반환하는 메소드
     public static ProductResponse from(Product product) {
         ProductResponse response = new ProductResponse();
         response.id = product.getId();
