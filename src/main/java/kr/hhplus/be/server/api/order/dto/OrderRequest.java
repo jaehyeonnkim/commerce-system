@@ -1,18 +1,23 @@
 package kr.hhplus.be.server.api.order.dto;
 
+import kr.hhplus.be.server.application.order.dto.request.OrderFacadeRequest;
+import kr.hhplus.be.server.domain.user.model.User;
 import lombok.*;
 
 @Getter @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderRequest {
-    private Long userId;
     private Long productId;
     private int quantity;
+    private Long userId;
 
-    public OrderRequest(Long userId, Long productId, int quantity) {
-        this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
+    public OrderFacadeRequest toOrderFacadeRequest(){
+        return OrderFacadeRequest.builder()
+                .productId(productId)
+                .quantity(quantity)
+                .userId(userId)
+                .build();
     }
 }

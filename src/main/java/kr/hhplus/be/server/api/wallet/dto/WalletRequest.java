@@ -7,14 +7,9 @@ import lombok.*;
 @Getter @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class WalletRequest {
     private Long userId;
     private TransactionType type;
     private int amount;
-
-    public WalletRequest(Long userId, TransactionType type, int amount) {
-        this.userId = userId;
-        this.type = type;
-        this.amount = amount;
-    }
 }
