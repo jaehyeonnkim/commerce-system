@@ -2,6 +2,8 @@ package kr.hhplus.be.server.api.product.controller;
 
 import kr.hhplus.be.server.common.filter.LoggingFilter;
 import kr.hhplus.be.server.domain.order.model.OrderProduct;
+import kr.hhplus.be.server.domain.order.service.OrderService;
+import kr.hhplus.be.server.domain.product.dto.ProductResponse;
 import kr.hhplus.be.server.domain.product.model.Product;
 import kr.hhplus.be.server.domain.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +44,9 @@ class ProductControllerTest {
     @MockitoBean
     private ProductService productService;
 
+    @MockitoBean
+    private OrderService orderService;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -54,8 +59,24 @@ class ProductControllerTest {
         // given
         Product product1 = new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
         Product product2 = new Product(2L, "멋진신발", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
-        Page<Product> products = new PageImpl<>(Arrays.asList(product1, product2));
+        Page<ProductResponse> products = new PageImpl<>(
+                Arrays.asList(
+                        ProductResponse.builder()
+                                .id(product1.getId())
+                                .name(product1.getName())
+                                .price(product1.getPrice())
+                                .stock(product1.getStock())
+                                .build(),
+                        ProductResponse.builder()
+                                .id(product2.getId())
+                                .name(product2.getName())
+                                .price(product2.getPrice())
+                                .stock(product2.getStock())
+                                .build()
+                )
+        );
 
+        // Mocking service layer
         when(productService.getProducts(any(Pageable.class))).thenReturn(products);
 
         // when & then
@@ -82,7 +103,7 @@ class ProductControllerTest {
                 OrderProduct.createOrderItem(new Product(2L, "멋진신발", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now())
                         ,1000,8)
                 );
-        when(productService.getPopularProducts()).thenReturn(popularProducts);
+        when(orderService.getPopularProducts()).thenReturn(popularProducts);
 
         // when & then
         MvcResult result = mockMvc.perform(get("/api/product/popular")

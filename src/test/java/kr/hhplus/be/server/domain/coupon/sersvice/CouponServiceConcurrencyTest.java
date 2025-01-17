@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.domain.coupon.sersvice;
 
-import kr.hhplus.be.server.api.coupon.dto.CouponRequest;
+import kr.hhplus.be.server.domain.coupon.dto.CouponRequest;
 import kr.hhplus.be.server.domain.coupon.model.Coupon;
 import kr.hhplus.be.server.domain.coupon.model.CouponStatus;
 import kr.hhplus.be.server.domain.coupon.model.CouponType;
@@ -67,7 +67,7 @@ public class CouponServiceConcurrencyTest {
             executorService.execute(() -> {
                 try {
                     CouponRequest couponRequest = new CouponRequest(user.getId(), coupon.getId());
-                    couponService.issueCoupon(couponRequest);
+                    couponService.issueCoupon(user, coupon, couponRequest);
                 } finally {
                     latch.countDown();
                 }

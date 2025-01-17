@@ -1,7 +1,9 @@
 package kr.hhplus.be.server.domain.wallet.service;
 
-import kr.hhplus.be.server.api.wallet.dto.WalletRequest;
-import kr.hhplus.be.server.api.wallet.dto.WalletResponse;
+import kr.hhplus.be.server.common.exception.BusinessException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.domain.wallet.dto.WalletRequest;
+import kr.hhplus.be.server.domain.wallet.dto.WalletResponse;
 import kr.hhplus.be.server.domain.user.model.User;
 import kr.hhplus.be.server.domain.user.repository.UserJpaRepository;
 import kr.hhplus.be.server.domain.wallet.model.TransactionType;
@@ -58,16 +60,20 @@ class WalletServiceTest {
     }
 
     @Test
-    @DisplayName(" 사용자 정보 없을 때 IllegalArgumentException 반환 ")
+    @DisplayName(" 사용자 정보 없을 때 WALLET_NOT_FOUND 반환 ")
     public void 잔액_조회_실패_사용자정보_없음() {
         // given
         Long userId = 1L;
         when(userJpaRepository.findById(userId)).thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(IllegalArgumentException.class,
-                () -> walletService.getBalance(userId),
-                "사용자를 찾을 수 없습니다.");
+        BusinessException exception = assertThrows(
+                BusinessException.class,
+                () -> walletService.getBalance(userId)
+        );
+
+        assertEquals(ErrorCode.WALLET_NOT_FOUND.getCode(), exception.getErrorCode());
+        assertEquals(ErrorCode.WALLET_NOT_FOUND.getMessage(), exception.getMessage());
     }
 
 
@@ -76,31 +82,36 @@ class WalletServiceTest {
     public void 충전_성공() {
         WalletRequest walletRequest = new WalletRequest(1L, TransactionType.CHARGE, 5000);
         User user = new User(1L, "김재현");
-        Wallet wallet = Wallet.createNewWallet(user, 5000, 10000, TransactionType.CHARGE);
+        Wallet wallet = Wallet.createNewWallet(user, 5000, 0, TransactionType.CHARGE);
 
         when(userJpaRepository.findById(1L)).thenReturn(Optional.of(user));
         when(walletJpaRepository.findBalanceById(1L)).thenReturn(Optional.of(wallet));
         when(walletJpaRepository.save(any(Wallet.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        ResponseEntity<WalletResponse> responseEntity = walletService.chargePoint(walletRequest);
+        WalletResponse responseEntity = walletService.chargePoint(user, walletRequest);
 
         // then
         assertNotNull(responseEntity);
-        assertEquals(15000, responseEntity.getBody().getBalance());
-        assertEquals("충전에 성공하였습니다", responseEntity.getBody().getMessage());
+        assertEquals(10000, responseEntity.getBalance());
     }
 
     @Test
-    @DisplayName("사용자 정보 없을 때 IllegalArgumentException 반환 ")
+    @DisplayName("사용자 정보 없을 때 WALLET_NOT_FOUND 반환 ")
     public void 충전_실패_사용자정보_없음() {
         // given
         WalletRequest walletRequest =  new WalletRequest(1L, TransactionType.CHARGE, 5000);
+        User user = null;
         when(userJpaRepository.findById(1L)).thenReturn(Optional.empty());
 
         // when & then
-        assertThrows(IllegalArgumentException.class,
-                () -> walletService.chargePoint(walletRequest),
-                "사용자를 찾을 수 없습니다.");
+        BusinessException exception = assertThrows(
+                BusinessException.class,
+                () -> walletService.chargePoint(user, walletRequest)
+        );
+
+        // 예외의 에러 코드 확인
+        assertEquals(ErrorCode.WALLET_NOT_FOUND.getCode(), exception.getErrorCode());
+        assertEquals(ErrorCode.WALLET_NOT_FOUND.getMessage(), exception.getMessage());
     }
 }

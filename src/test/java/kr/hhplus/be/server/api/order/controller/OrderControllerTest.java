@@ -2,7 +2,7 @@ package kr.hhplus.be.server.api.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.hhplus.be.server.domain.order.dto.OrderRequest;
-import kr.hhplus.be.server.domain.order.dto.OrderResult;
+import kr.hhplus.be.server.domain.order.dto.OrderResponse;
 import kr.hhplus.be.server.domain.order.service.OrderService;
 import kr.hhplus.be.server.domain.product.model.Product;
 import kr.hhplus.be.server.domain.user.model.User;
@@ -52,11 +52,11 @@ public class OrderControllerTest {
     public void 주문_통합_테스트() throws Exception {
         // given
         OrderRequest orderRequest = new OrderRequest(1L, 1, 1L);
-        OrderResult orderResponse = new OrderResult(1L, 1000);
+        OrderResponse orderResponse = new OrderResponse(1L, 1000);
         User user = new User(1L, "김재현");
         Product product = new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
 
-        when(orderService.orderProducts(user, product,orderRequest).thenReturn(orderResponse);
+        when(orderService.orderProducts(user, product,orderRequest)).thenReturn(orderResponse);
 
         // when & then
         MvcResult result = mockMvc.perform(post("/api/order/1")

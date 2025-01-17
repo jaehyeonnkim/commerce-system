@@ -1,8 +1,12 @@
 package kr.hhplus.be.server.api.payment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.hhplus.be.server.api.payment.dto.PaymentRequest;
-import kr.hhplus.be.server.api.payment.dto.PaymentResponse;
+import kr.hhplus.be.server.domain.coupon.model.Coupon;
+import kr.hhplus.be.server.domain.coupon.model.CouponStatus;
+import kr.hhplus.be.server.domain.coupon.model.CouponType;
+import kr.hhplus.be.server.domain.order.model.Order;
+import kr.hhplus.be.server.domain.payment.dto.PaymentRequest;
+import kr.hhplus.be.server.domain.payment.dto.PaymentResponse;
 import kr.hhplus.be.server.domain.payment.model.PaymentStatus;
 import kr.hhplus.be.server.domain.payment.model.PaymentType;
 import kr.hhplus.be.server.domain.payment.service.PaymentService;
@@ -59,9 +63,12 @@ class PaymentControllerTest {
         //userJpaRepository.save(new User(1L, "김재현"));
         // given
         PaymentRequest paymentRequest = new PaymentRequest(1L, 1L, 1L, PaymentType.CARD);
-        PaymentResponse paymentResponse = new PaymentResponse(1L, PaymentStatus.PAID, 10000, "SUCCESS");
+        PaymentResponse paymentResponse = new PaymentResponse(PaymentStatus.PAID,10000);
+        User user = new User(1L, "김재현");
+        Order order = new Order();
+        Coupon coupon = new Coupon(1L, CouponType.FIXED, 2000, 100, 0, CouponStatus.ACTIVE, "TEST_COUPON");
 
-        when(paymentService.payOrder(any(PaymentRequest.class))).thenReturn(paymentResponse);
+        when(paymentService.payOrder(user,order,coupon,paymentRequest)).thenReturn(paymentResponse);
 
         // when & then
         MvcResult result = mockMvc.perform(post("/api/pay/1")
@@ -71,7 +78,6 @@ class PaymentControllerTest {
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.totalAmount", is(10000)))
                 .andExpect(jsonPath("$.status", is("PAID")))
-                .andExpect(jsonPath("$.message", is("SUCCESS")))
                 .andReturn();
 
         logger.info("GET - /api/pay Status: {}", result.getResponse().getStatus());

@@ -2,6 +2,8 @@ package kr.hhplus.be.server.domain.product.service;
 
 import kr.hhplus.be.server.domain.order.model.OrderProduct;
 import kr.hhplus.be.server.domain.order.repository.OrderProductJpaRepository;
+import kr.hhplus.be.server.domain.order.service.OrderService;
+import kr.hhplus.be.server.domain.product.dto.ProductResponse;
 import kr.hhplus.be.server.domain.product.model.Product;
 import kr.hhplus.be.server.domain.product.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +30,10 @@ class ProductServiceTest {
     @InjectMocks
     private ProductService productService;
 
+    @InjectMocks
+    private OrderService orderService;
+
+
     @Mock
     private ProductRepository productRepository;
 
@@ -48,7 +54,7 @@ class ProductServiceTest {
         when(productRepository.findAll(pageable)).thenReturn(productPage);
 
         // when
-        Page<Product> result = productService.getProducts(pageable);
+        Page<ProductResponse> result = productService.getProducts(pageable);
 
         // then
         assertNotNull(result);
@@ -70,13 +76,12 @@ class ProductServiceTest {
         when(orderProductJpaRepository.findPopularProducts()).thenReturn(popularProducts);
 
         // when
-        List<OrderProduct> result = productService.getPopularProducts();
+        List<OrderProduct> result = orderService.getPopularProducts();
 
         // then
         assertNotNull(result);
-        assertEquals(3, result.size());
-        assertEquals(1L, result.get(0).getId());
-        assertEquals(50, result.get(0).getQuantity());
+        assertEquals(2, result.size());
+        assertEquals(10, result.get(0).getQuantity());
     }
 
 }

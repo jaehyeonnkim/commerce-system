@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.application.wallet.facade;
 
-import kr.hhplus.be.server.api.wallet.dto.WalletRequest;
+import kr.hhplus.be.server.domain.wallet.dto.WalletRequest;
 import kr.hhplus.be.server.application.wallet.dto.request.WalletFacadeRequest;
 import kr.hhplus.be.server.application.wallet.dto.response.WalletFacadeResponse;
 import kr.hhplus.be.server.domain.coupon.sersvice.CouponService;

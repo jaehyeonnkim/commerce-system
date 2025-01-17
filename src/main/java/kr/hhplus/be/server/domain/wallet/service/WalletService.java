@@ -4,7 +4,7 @@ import kr.hhplus.be.server.common.exception.BusinessException;
 import kr.hhplus.be.server.common.exception.ErrorCode;
 import kr.hhplus.be.server.domain.user.model.User;
 import kr.hhplus.be.server.domain.user.repository.UserJpaRepository;
-import kr.hhplus.be.server.api.wallet.dto.WalletRequest;
+import kr.hhplus.be.server.domain.wallet.dto.WalletRequest;
 import kr.hhplus.be.server.domain.wallet.dto.WalletResponse;
 import kr.hhplus.be.server.domain.wallet.model.TransactionType;
 import kr.hhplus.be.server.domain.wallet.model.Wallet;
