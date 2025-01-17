@@ -1,22 +1,25 @@
 package kr.hhplus.be.server.api.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.hhplus.be.server.api.order.dto.OrderRequest;
-import kr.hhplus.be.server.api.order.dto.OrderResponse;
-import kr.hhplus.be.server.domain.coupon.repository.IssueCouponJpaRepository;
+import kr.hhplus.be.server.domain.order.dto.OrderRequest;
+import kr.hhplus.be.server.domain.order.dto.OrderResult;
 import kr.hhplus.be.server.domain.order.service.OrderService;
+import kr.hhplus.be.server.domain.product.model.Product;
 import kr.hhplus.be.server.domain.user.model.User;
-import kr.hhplus.be.server.domain.user.repository.UserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,19 +30,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 public class OrderControllerTest {
+    private static final Logger logger = LoggerFactory.getLogger(OrderControllerTest.class);
+
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private UserJpaRepository userJpaRepository;
-
-    @Autowired
-    private IssueCouponJpaRepository issueCouponJpaRepository;
-
-    @Mock
+    @MockitoBean
     private OrderService orderService;
 
     private MockMvc mockMvc;
@@ -47,31 +46,27 @@ public class OrderControllerTest {
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
-        userJpaRepository.deleteAll();
-        issueCouponJpaRepository.deleteAll();
-
-        User user = new User(1L, "김재현");
-        userJpaRepository.save(user);
     }
 
     @Test
     public void 주문_통합_테스트() throws Exception {
         // given
-        OrderRequest orderRequest = new OrderRequest(1L, 1L, 2);
-        OrderResponse orderResponse = new OrderResponse(1L, 1000);
+        OrderRequest orderRequest = new OrderRequest(1L, 1, 1L);
+        OrderResult orderResponse = new OrderResult(1L, 1000);
+        User user = new User(1L, "김재현");
+        Product product = new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
 
-        when(orderService.order(any(OrderRequest.class))).thenReturn(orderResponse);
+        when(orderService.orderProducts(user, product,orderRequest).thenReturn(orderResponse);
 
         // when & then
         MvcResult result = mockMvc.perform(post("/api/order/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.message", is("주문 성공")))
+                .andExpect(jsonPath("$.totalAmount", is(1000)))
                 .andReturn();
 
-        System.out.println("POST - /api/order/1 " + result.getResponse().getStatus() + " OK");
+        logger.info("GET - /api/order Status: {}", result.getResponse().getStatus());
+
     }
 }
