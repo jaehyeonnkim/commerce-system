@@ -1,9 +1,8 @@
 package kr.hhplus.be.server.domain.order.service;
 
 import kr.hhplus.be.server.api.order.dto.OrderRequest;
-import kr.hhplus.be.server.api.order.dto.OrderResponse;
+import kr.hhplus.be.server.api.order.dto.OrderResult;
 import kr.hhplus.be.server.domain.order.model.Order;
-import kr.hhplus.be.server.domain.order.model.OrderProduct;
 import kr.hhplus.be.server.domain.order.repository.OrderJpaRepository;
 import kr.hhplus.be.server.domain.order.repository.OrderProductJpaRepository;
 import kr.hhplus.be.server.domain.product.model.Product;
@@ -18,7 +17,6 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,11 +77,11 @@ class OrderServiceTest {
         User user = new User(1L,"김재현");
 
         when(userJpaRepository.findById(anyLong())).thenReturn(Optional.of(user));
-        when(productRepository.findById(1L)).thenReturn(product);
+        //when(productRepository.findById(1L)).thenReturn(product);
         when(orderJpaRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        OrderResponse orderResponse = orderService.order(orderRequest);
+        OrderResult orderResponse = orderService.order(orderRequest);
 
         // then
         assertNotNull(orderResponse);

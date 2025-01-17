@@ -1,6 +1,9 @@
 package kr.hhplus.be.server.domain.user.model;
 
 import jakarta.persistence.*;
+import kr.hhplus.be.server.common.exception.BusinessException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.domain.coupon.model.Coupon;
 import kr.hhplus.be.server.domain.coupon.model.IssueCoupon;
 import kr.hhplus.be.server.domain.order.model.Order;
 import kr.hhplus.be.server.domain.payment.model.Payment;
@@ -50,7 +53,7 @@ public class User {
     //validation
     public void validateUser() {
         if (this == null) {
-            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND.getCode(), ErrorCode.USER_NOT_FOUND.getMessage());
         }
     }
 }

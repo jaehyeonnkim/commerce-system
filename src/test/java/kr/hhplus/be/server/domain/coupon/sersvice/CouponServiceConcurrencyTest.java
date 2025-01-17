@@ -56,7 +56,7 @@ public class CouponServiceConcurrencyTest {
 
     @Test
     @DisplayName("동시성 테스트 - 쿠폰 선착순 발급 성공")
-    public void testIssueCoupon_ConcurrencySuccess() throws InterruptedException {
+    public void 쿠폰_선착순_동시성_테스트() throws InterruptedException {
         // given
         int numberOfThreads = 10; // 쓰레드 수
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);

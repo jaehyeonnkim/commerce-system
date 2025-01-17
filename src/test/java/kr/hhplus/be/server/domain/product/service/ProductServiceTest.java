@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.product.service;
 
+import kr.hhplus.be.server.domain.order.model.OrderProduct;
 import kr.hhplus.be.server.domain.order.repository.OrderProductJpaRepository;
 import kr.hhplus.be.server.domain.product.model.Product;
 import kr.hhplus.be.server.domain.product.repository.ProductRepository;
@@ -59,22 +60,23 @@ class ProductServiceTest {
     @DisplayName("인기 상품 조회 성공")
     public void 인기_상품_조회_성공() {
         // given
-        List<Object[]> popularProducts = Arrays.asList(
-                new Object[]{1L, 50},
-                new Object[]{2L, 30},
-                new Object[]{3L, 10}
+        List<OrderProduct> popularProducts = Arrays.asList(
+                OrderProduct.createOrderItem(new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now())
+                        ,1000,10),
+                OrderProduct.createOrderItem(new Product(2L, "멋진신발", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now())
+                        ,1000,8)
         );
 
         when(orderProductJpaRepository.findPopularProducts()).thenReturn(popularProducts);
 
         // when
-        List<Map<String, Object>> result = productService.getPopularProducts();
+        List<OrderProduct> result = productService.getPopularProducts();
 
         // then
         assertNotNull(result);
         assertEquals(3, result.size());
-        assertEquals(1L, result.get(0).get("productId"));
-        assertEquals(50, result.get(0).get("totalQuantity"));
+        assertEquals(1L, result.get(0).getId());
+        assertEquals(50, result.get(0).getQuantity());
     }
 
 }
