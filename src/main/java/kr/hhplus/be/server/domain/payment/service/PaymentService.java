@@ -1,7 +1,10 @@
 package kr.hhplus.be.server.domain.payment.service;
 
-import kr.hhplus.be.server.api.payment.dto.PaymentRequest;
-import kr.hhplus.be.server.api.payment.dto.PaymentResponse;
+import kr.hhplus.be.server.domain.order.dto.OrderResponse;
+import kr.hhplus.be.server.domain.payment.dto.PaymentRequest;
+import kr.hhplus.be.server.domain.payment.dto.PaymentResponse;
+import kr.hhplus.be.server.common.exception.BusinessException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
 import kr.hhplus.be.server.domain.coupon.model.Coupon;
 import kr.hhplus.be.server.domain.coupon.repository.CouponJpaRepository;
 import kr.hhplus.be.server.domain.order.model.Order;
@@ -26,36 +29,16 @@ public class PaymentService {
     private final UserJpaRepository userJpaRepository;
     private final CouponJpaRepository couponJpaRepository;
 
-    /**
-     * 결제
-     */
+    //결제
     @Transactional
-    public PaymentResponse payOrder(PaymentRequest paymentRequest) {
-        // 엔티티 조회
-        User user = findByIdOrThrow(userJpaRepository, paymentRequest.getUserId(), "사용자를 찾을 수 없습니다.");
-        Order order = findByIdOrThrow(orderJpaRepository, paymentRequest.getOrderId(), "주문을 찾을 수 없습니다.");
-        Coupon coupon = null;
-        if (paymentRequest.getCouponId() != null) {
-            coupon = findByIdOrThrow(couponJpaRepository, paymentRequest.getCouponId(), "쿠폰을 찾을 수 없습니다.");
-        }
-        // 2. 결제 생성
+    public PaymentResponse payOrder(User user, Order order, Coupon coupon, PaymentRequest paymentRequest) {
         Payment payment = Payment.createPayment(user, order, coupon, paymentRequest.getPaymentType());
         paymentJpaRepository.save(payment);
         payment.markAsPaid();
-        // 3. 주문 상태 변경 ORDER -> PAID
         order.markAsPaid();
         paymentJpaRepository.save(payment);
 
-        // 4. 응답 생성
-        PaymentResponse paymentResponse = new PaymentResponse();
-        paymentResponse.setId(payment.getId());
-        paymentResponse.setTotalAmount(payment.getTotalAmount());
-        paymentResponse.setStatus(order.getPayment().getStatus());
-        return paymentResponse;
-    }
-
-    private <T> T findByIdOrThrow(JpaRepository<T, Long> repository, Long id, String errorMessage) {
-        return repository.findById(id).orElseThrow(() -> new IllegalArgumentException(errorMessage));
+        return new PaymentResponse(payment.getStatus(), payment.getTotalAmount());
     }
 
 }

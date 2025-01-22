@@ -2,18 +2,22 @@ package kr.hhplus.be.server.domain.order.model;
 
 import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.product.model.Product;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@Table(name = "order_product")
 public class OrderProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="order_produet_id")
+    @Column(name="order_product_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

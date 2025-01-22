@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
 public class CouponResponse {
     private Long couponId;
     private String name;

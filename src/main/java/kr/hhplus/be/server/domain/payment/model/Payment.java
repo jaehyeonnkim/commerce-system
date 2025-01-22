@@ -63,6 +63,8 @@ public class Payment {
         payment.setType(type);
         payment.setCreatedAt(LocalDateTime.now());
         payment.calculateTotalAmount();
+        payment.setStatus(PaymentStatus.PAID);
+        payment.setUpdatedAt(LocalDateTime.now());
         return payment;
     }
 

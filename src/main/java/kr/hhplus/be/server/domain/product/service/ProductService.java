@@ -1,18 +1,22 @@
 package kr.hhplus.be.server.domain.product.service;
 
+import kr.hhplus.be.server.application.product.dto.response.TopProductResponse;
+import kr.hhplus.be.server.common.exception.BusinessException;
+import kr.hhplus.be.server.common.exception.ErrorCode;
+import kr.hhplus.be.server.domain.order.model.OrderProduct;
 import kr.hhplus.be.server.domain.order.repository.OrderProductJpaRepository;
+import kr.hhplus.be.server.domain.product.dto.ProductResponse;
 import kr.hhplus.be.server.domain.product.model.Product;
 import kr.hhplus.be.server.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -24,20 +28,19 @@ public class ProductService {
     private final  OrderProductJpaRepository orderProductJpaRepository;
 
     //상품 조회
-    public Page<Product> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<ProductResponse> getProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        List<ProductResponse> productResults = products.getContent().stream()
+                .map(ProductResponse::toResult)
+                .collect(Collectors.toList());
+        return new PageImpl<>(productResults, pageable, products.getTotalElements());
+
     }
 
-    //인기 상품 조회
-    public List<Map<String, Object>> getPopularProducts() {
-        List<Object[]> result = orderProductJpaRepository.findPopularProducts();
-        List<Map<String, Object>> products = new ArrayList<>();
-        for (Object[] row : result) {
-            Map<String, Object> productData = new HashMap<>();
-            productData.put("productId", ((Number) row[0]).longValue());
-            productData.put("totalQuantity", ((Number) row[1]).intValue());
-            products.add(productData);
-        }
-        return products;
+
+    public Product findProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND.getCode(), ErrorCode.PRODUCT_NOT_FOUND.getMessage()));
     }
+
 }
