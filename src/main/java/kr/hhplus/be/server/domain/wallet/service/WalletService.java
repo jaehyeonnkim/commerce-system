@@ -10,12 +10,12 @@ import kr.hhplus.be.server.domain.wallet.model.TransactionType;
 import kr.hhplus.be.server.domain.wallet.model.Wallet;
 import kr.hhplus.be.server.domain.wallet.repository.WalletJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class WalletService {
 
@@ -23,6 +23,7 @@ public class WalletService {
     private final WalletJpaRepository walletJpaRepository;
 
     //잔액 조회
+    @Transactional
     public WalletResponse getBalance(Long userId) {
         Wallet wallet = walletJpaRepository.findBalanceById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.WALLET_NOT_FOUND.getCode(), ErrorCode.WALLET_NOT_FOUND.getMessage()));
@@ -31,17 +32,22 @@ public class WalletService {
     }
 
     //잔액 충전
+    @Transactional
     public WalletResponse chargePoint(User user, WalletRequest walletRequest) {
         int currentBalance = walletJpaRepository.findBalanceById(walletRequest.getUserId())
                 .map(Wallet::getBalance)
                 .orElse(0);
 
-        Wallet wallet = Wallet.createNewWallet(user, walletRequest.getAmount(), currentBalance + walletRequest.getAmount(), TransactionType.CHARGE);
+        int updatedBalance = currentBalance + walletRequest.getAmount();
+
+        Wallet wallet = Wallet.createNewWallet(user, walletRequest.getAmount(), updatedBalance, TransactionType.CHARGE);
 
         walletJpaRepository.save(wallet);
 
-        return new WalletResponse(wallet.getId(), currentBalance);
+        return new WalletResponse(wallet.getId(), updatedBalance);
     }
+
+
 
 
 

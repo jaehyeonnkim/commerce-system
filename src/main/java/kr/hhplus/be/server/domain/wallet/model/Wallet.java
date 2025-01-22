@@ -35,6 +35,9 @@ public class Wallet {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    @Version
+    private Integer version;
+
     // 지갑 생성 메서드
     public static Wallet createNewWallet(User user, int amount, int balance, TransactionType type) {
         Wallet wallet = new Wallet();
