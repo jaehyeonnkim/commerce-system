@@ -1,11 +1,18 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
-    show-sql: true
+      ddl-auto: update
+      show-sql: true
     properties:
       hibernate.format_sql: true
-logging:
+    open-in-view=false:
+    logging:
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+      data-locations: classpath:data.sql
   level:
     root: WARN
     org.springframework: WARN
+
