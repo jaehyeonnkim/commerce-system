@@ -1,13 +1,13 @@
-package kr.hhplus.be.server.api.wallet;
+package kr.hhplus.be.server.api.order;
 
 
+import kr.hhplus.be.server.application.order.dto.request.OrderFacadeRequest;
+import kr.hhplus.be.server.application.order.facade.OrderFacade;
+import kr.hhplus.be.server.domain.order.repository.OrderRepository;
+import kr.hhplus.be.server.domain.product.model.Product;
+import kr.hhplus.be.server.domain.product.repository.ProductRepository;
 import kr.hhplus.be.server.domain.user.model.User;
 import kr.hhplus.be.server.domain.user.repository.UserJpaRepository;
-import kr.hhplus.be.server.domain.wallet.dto.WalletRequest;
-import kr.hhplus.be.server.domain.wallet.model.TransactionType;
-import kr.hhplus.be.server.domain.wallet.model.Wallet;
-import kr.hhplus.be.server.domain.wallet.repository.WalletJpaRepository;
-import kr.hhplus.be.server.domain.wallet.service.WalletService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,19 +17,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class WalletConcurrencyTest {
+public class OrderConcurrencyTest {
 
     @Autowired
-    private WalletService walletService;
-
-    @Autowired
-    private WalletJpaRepository walletJpaRepository;
-
+    private OrderFacade orderFacade;
     @Autowired
     private UserJpaRepository userJpaRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Test
     public void 동시성_테스트_성공() throws InterruptedException {
@@ -37,11 +34,10 @@ public class WalletConcurrencyTest {
 
         User user = User.builder().name("김재현").build();
         userJpaRepository.save(user);
+        Product product = Product.builder().name("멋진가방").price(10000).stock(100).build();
+        productRepository.save(product);
 
-        Wallet wallet = Wallet.createNewWallet(user, 100, 100, TransactionType.CHARGE);
-        walletJpaRepository.save(wallet);
-
-        WalletRequest walletRequest = new WalletRequest(user.getId(), TransactionType.CHARGE, 1000);
+        OrderFacadeRequest orderRequest = new OrderFacadeRequest(user.getId(), product.getId(), 1);
 
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
         CountDownLatch latch = new CountDownLatch(THREAD_COUNT);
@@ -49,7 +45,7 @@ public class WalletConcurrencyTest {
         for (int i = 0; i < THREAD_COUNT; i++) {
             executorService.submit(() -> {
                 try {
-                    walletService.chargePoint(user, walletRequest);
+                    orderFacade.orderProducts(orderRequest);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -61,9 +57,8 @@ public class WalletConcurrencyTest {
         latch.await();
         executorService.shutdown();
 
-        Wallet updatedWallet = walletJpaRepository.findBalanceById(user.getId()).orElseThrow();
-        assertNotNull(updatedWallet);
-        assertEquals(10100, updatedWallet.getBalance()); //초기값 100
-        }
+        Product updatedProduct = productRepository.findById(product.getId()).orElseThrow();
+        assertEquals(90, updatedProduct.getStock()); // 100 - 10 * 1 = 90
+    }
 
 }

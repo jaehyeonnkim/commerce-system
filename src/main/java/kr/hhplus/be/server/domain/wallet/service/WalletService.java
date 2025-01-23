@@ -21,7 +21,7 @@ public class WalletService {
     //잔액 조회
     @Transactional
     public WalletResponse getBalance(Long userId) {
-        Wallet wallet = walletJpaRepository.findBalanceById(userId)
+        Wallet wallet = walletJpaRepository.findByIdWithLock(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.WALLET_NOT_FOUND.getCode(), ErrorCode.WALLET_NOT_FOUND.getMessage()));
 
         return new WalletResponse(wallet.getId(), wallet.getBalance());
