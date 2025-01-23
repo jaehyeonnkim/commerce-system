@@ -46,8 +46,8 @@ class ProductServiceTest {
         // given
         Pageable pageable = PageRequest.of(0, 10);
         List<Product> productList = Arrays.asList(
-                new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now()),
-                new Product(2L, "멋진신발", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now()));
+                Product.builder().name("멋진가방").price(10000).stock(100).build(),
+                Product.builder().name("멋진신발").price(20000).stock(100).build());
 
         Page<Product> productPage = new PageImpl<>(productList);
 
@@ -67,10 +67,8 @@ class ProductServiceTest {
     public void 인기_상품_조회_성공() {
         // given
         List<OrderProduct> popularProducts = Arrays.asList(
-                OrderProduct.createOrderItem(new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now())
-                        ,1000,10),
-                OrderProduct.createOrderItem(new Product(2L, "멋진신발", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now())
-                        ,1000,8)
+                OrderProduct.createOrderItem(Product.builder().name("멋진가방").price(10000).stock(100).build(),1000,10),
+                OrderProduct.createOrderItem(Product.builder().name("멋진신발").price(20000).stock(100).build(),1000,8)
         );
 
         when(orderProductJpaRepository.findPopularProducts()).thenReturn(popularProducts);

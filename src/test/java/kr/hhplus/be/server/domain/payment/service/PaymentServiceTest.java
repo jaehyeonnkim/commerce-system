@@ -54,7 +54,7 @@ class PaymentServiceTest {
         // given
         PaymentRequest paymentRequest = new PaymentRequest(1L, 1L, null, PaymentType.CARD);
         User user = new User(1L, "김재현");
-        Product product = new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
+        Product product = Product.builder().name("멋진가방").price(10000).stock(100).build();
         OrderProduct orderProduct = OrderProduct.createOrderItem(product, 10000, 2);
         Coupon coupon = new Coupon(1L,CouponType.FIXED, 2000, 100, 0, CouponStatus.ACTIVE, "TEST_COUPON");
 
@@ -79,7 +79,7 @@ class PaymentServiceTest {
         // given
         PaymentRequest paymentRequest = new PaymentRequest(1L, 1L, 1L, PaymentType.CARD);
         User user = new User(1L, "김재현");
-        Product product = new Product(1L, "멋진가방", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
+        Product product = Product.builder().name("멋진가방").price(20000).stock(100).build();
         OrderProduct orderProduct = OrderProduct.createOrderItem(product, 10000, 2);
         Order order = Order.createOrder(user,orderProduct);
         Coupon coupon = new Coupon(1L, CouponType.FIXED, 5000, 100, 0, CouponStatus.ACTIVE, "TEST COUPON");
@@ -105,7 +105,7 @@ class PaymentServiceTest {
         // given
         PaymentRequest paymentRequest = new PaymentRequest(1L, 1L, null, PaymentType.CARD);
         User user = new User();
-        Product product = new Product(1L, "멋진가방", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
+        Product product = Product.builder().name("멋진가방").price(20000).stock(100).build();
         OrderProduct orderProduct = OrderProduct.createOrderItem(product, 10000, 2);
         Order order = Order.createOrder(user,orderProduct);
         Coupon coupon = new Coupon(1L, CouponType.FIXED, 5000, 100, 0, CouponStatus.ACTIVE, "TEST COUPON");
@@ -125,7 +125,7 @@ class PaymentServiceTest {
         // given
         PaymentRequest paymentRequest = new PaymentRequest(1L, 1L, null, PaymentType.CARD);
         User user = new User(1L, "김재현");
-        Product product = new Product(1L, "멋진가방", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
+        Product product = Product.builder().name("멋진가방").price(20000).stock(100).build();
         Order order = new Order();
         Coupon coupon = new Coupon(1L, CouponType.FIXED, 5000, 100, 0, CouponStatus.ACTIVE, "TEST COUPON");
 
