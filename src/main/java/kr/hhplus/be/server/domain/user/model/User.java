@@ -8,14 +8,15 @@ import kr.hhplus.be.server.domain.coupon.model.IssueCoupon;
 import kr.hhplus.be.server.domain.order.model.Order;
 import kr.hhplus.be.server.domain.payment.model.Payment;
 import kr.hhplus.be.server.domain.wallet.model.Wallet;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Builder
+@AllArgsConstructor
 @Entity
 @Getter @Setter
 @Table(name="users")
@@ -23,7 +24,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
 

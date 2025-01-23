@@ -3,6 +3,7 @@ package kr.hhplus.be.server.domain.product.model;
 import jakarta.persistence.*;
 import kr.hhplus.be.server.common.exception.BusinessException;
 import kr.hhplus.be.server.common.exception.ErrorCode;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter
 @Builder
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -30,16 +32,6 @@ public class Product {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-    public Product(Long id, String name, Integer price, Integer stock, Integer saleCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.saleCount = saleCount;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
 
     public Product() {}
