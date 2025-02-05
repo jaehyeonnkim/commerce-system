@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -27,6 +26,7 @@ public class OrderService {
     private final OrderProductJpaRepository orderProductJpaRepository;
 
     //주문
+    @Transactional
     public OrderResponse orderProducts(User user, Product product, OrderRequest orderRequest) {
         OrderProduct orderProduct = OrderProduct.createOrderItem(product, product.getPrice(), orderRequest.getQuantity());
 
@@ -37,13 +37,14 @@ public class OrderService {
         return new OrderResponse(order.getId(), order.getTotalAmount());
     }
 
-
+    @Transactional
     public Order getOrderById(long orderId) {
         return orderJpaRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ORDER_NOT_FOUND.getCode(), ErrorCode.ORDER_NOT_FOUND.getMessage()));
     }
 
     //인기 상품 조회
+    @Transactional
     public List<OrderProduct> getPopularProducts() {
         return orderProductJpaRepository.findPopularProducts();
     }

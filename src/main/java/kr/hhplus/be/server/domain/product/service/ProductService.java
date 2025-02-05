@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ProductService {
 
@@ -28,6 +27,7 @@ public class ProductService {
     private final  OrderProductJpaRepository orderProductJpaRepository;
 
     //상품 조회
+    @Transactional
     public Page<ProductResponse> getProducts(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
         List<ProductResponse> productResults = products.getContent().stream()
@@ -37,9 +37,9 @@ public class ProductService {
 
     }
 
-
+    @Transactional
     public Product findProductById(Long id) {
-        return productRepository.findById(id)
+        return productRepository.findByIdWithLock(id) 
                 .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND.getCode(), ErrorCode.PRODUCT_NOT_FOUND.getMessage()));
     }
 

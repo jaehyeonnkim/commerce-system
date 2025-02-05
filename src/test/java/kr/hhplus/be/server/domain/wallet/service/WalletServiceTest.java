@@ -50,8 +50,6 @@ class WalletServiceTest {
         when(walletJpaRepository.findBalanceById(userId)).thenReturn(Optional.of(wallet));
 
         // when
-        System.out.println(wallet.getBalance());
-        System.out.println(wallet.getAmount());
         WalletResponse response = walletService.getBalance(userId);
 
         // then
@@ -80,20 +78,22 @@ class WalletServiceTest {
     @Test
     @DisplayName("잔액 충전 성공")
     public void 충전_성공() {
-        WalletRequest walletRequest = new WalletRequest(1L, TransactionType.CHARGE, 5000);
+        WalletRequest walletRequest = new WalletRequest(1L, TransactionType.CHARGE, 10000);
         User user = new User(1L, "김재현");
-        Wallet wallet = Wallet.createNewWallet(user, 5000, 0, TransactionType.CHARGE);
 
-        when(userJpaRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(walletJpaRepository.findBalanceById(1L)).thenReturn(Optional.of(wallet));
-        when(walletJpaRepository.save(any(Wallet.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Wallet wallet = Wallet.createNewWallet(user, 10000, 0, TransactionType.CHARGE);
 
-        // when
+        when(walletJpaRepository.findBalanceById(walletRequest.getUserId()))
+                .thenReturn(Optional.of(wallet));
+        when(walletJpaRepository.save(any(Wallet.class)))
+                .thenReturn(wallet);
+
+        // when & then
         WalletResponse responseEntity = walletService.chargePoint(user, walletRequest);
 
-        // then
         assertNotNull(responseEntity);
         assertEquals(10000, responseEntity.getBalance());
+
     }
 
     @Test

@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.api.product.controller;
 
-import kr.hhplus.be.server.common.filter.LoggingFilter;
 import kr.hhplus.be.server.domain.order.model.OrderProduct;
 import kr.hhplus.be.server.domain.order.service.OrderService;
 import kr.hhplus.be.server.domain.product.dto.ProductResponse;
@@ -23,7 +22,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -57,8 +55,8 @@ class ProductControllerTest {
     @Test
     public void 상품_조회_통합테스트() throws Exception {
         // given
-        Product product1 = new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
-        Product product2 = new Product(2L, "멋진신발", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
+        Product product1 = Product.builder().name("멋진가방").price(10000).stock(100).build();
+        Product product2 = Product.builder().name("멋진신발").price(20000).stock(100).build();
         Page<ProductResponse> products = new PageImpl<>(
                 Arrays.asList(
                         ProductResponse.builder()
@@ -97,11 +95,11 @@ class ProductControllerTest {
     @Disabled
     public void 인기_상품_조회_통합테스트() throws Exception {
         // given
+        Product product1 = Product.builder().name("멋진가방").price(10000).stock(100).build();
+        Product product2 = Product.builder().name("멋진신발").price(20000).stock(100).build();
         List<OrderProduct> popularProducts = Arrays.asList(
-                OrderProduct.createOrderItem(new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now())
-                    ,1000,10),
-                OrderProduct.createOrderItem(new Product(2L, "멋진신발", 20000, 100, 0, LocalDateTime.now(), LocalDateTime.now())
-                        ,1000,8)
+                OrderProduct.createOrderItem(product1,1000,10),
+                OrderProduct.createOrderItem(product2,1000,8)
                 );
         when(orderService.getPopularProducts()).thenReturn(popularProducts);
 

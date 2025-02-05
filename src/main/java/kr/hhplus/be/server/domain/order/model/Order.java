@@ -6,14 +6,14 @@ import kr.hhplus.be.server.common.exception.ErrorCode;
 import kr.hhplus.be.server.domain.coupon.model.CouponStatus;
 import kr.hhplus.be.server.domain.payment.model.Payment;
 import kr.hhplus.be.server.domain.user.model.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
 @Entity
 @Getter @Setter
 @Table(name="orders")
@@ -46,10 +46,10 @@ public class Order {
     private LocalDateTime updatedAt;
 
     //==연관관계 메서드==//
-    public void setUser(User user) {
+  /*  public void setUser(User user) {
         this.user = user;
         user.getOrders().add(this);
-    }
+    }*/
 
     public void addOrderProduct(OrderProduct orderProduct) {
         orderItems.add(orderProduct);

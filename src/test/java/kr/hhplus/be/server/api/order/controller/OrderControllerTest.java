@@ -54,7 +54,7 @@ public class OrderControllerTest {
         OrderRequest orderRequest = new OrderRequest(1L, 1, 1L);
         OrderResponse orderResponse = new OrderResponse(1L, 1000);
         User user = new User(1L, "김재현");
-        Product product = new Product(1L, "멋진가방", 10000, 100, 0, LocalDateTime.now(), LocalDateTime.now());
+        Product product = Product.builder().name("멋진가방").price(10000).stock(100).build();
 
         when(orderService.orderProducts(user, product,orderRequest)).thenReturn(orderResponse);
 
